@@ -19,8 +19,10 @@ public class Sample1 {
 
         //open test homepage
         driver.get("https://google.com");
-        driver.get("https://kristinek.github.io/site/");
-        System.out.println(driver.findElement(By.id("h1")).getText());
+        //driver.get("https://kristinek.github.io/site/");
+        driver.get("https://www.ss.com/");
+        //System.out.println(driver.findElement(By.id("h1")).getText());
+        System.out.println(driver.findElement(By.id("main_table")).getText());
         //get title of page
         System.out.println(driver.getTitle());
         //get URL of current page
