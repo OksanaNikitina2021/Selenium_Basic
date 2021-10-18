@@ -39,7 +39,14 @@ public class Sample3Task {
     public void assertEqualsTask() throws Exception {
 //         TODO:
 //         check how many element with class "test" there are on page (5)
+        int expectedNumOfElements = 5;
+        int actualNumOfElements = driver.findElements(By.className("test")).size();
+        assertEquals(expectedNumOfElements, actualNumOfElements);
+
 //         check that value of second button is "This is also a button"
+        String expectedName = "This is also a button";
+        String actualName = driver.findElement(By.name("randomButton2")).getAttribute("value");
+        assertEquals(expectedName, actualName);
     }
 
     @Test
@@ -47,13 +54,18 @@ public class Sample3Task {
 //         TODO:
 //         check that it is True that value of second button is
 //         "this is Also a Button" if you ignore Caps Locks
+        String buttonNameOnPage = driver.findElement(By.name("randomButton2")).getAttribute("value");
+        assertTrue(buttonNameOnPage.equalsIgnoreCase("this is Also a Button"));
 //         fail with custom error message:
+        assertTrue("Text does not match", buttonNameOnPage.equalsIgnoreCase("iT Is a BuTTon"));
     }
 
     @Test
     public void assertFalseTask() throws Exception {
 //         TODO:
 //        check that it is False that value of second button is "This is a button"
+        String buttonNameOnPage = driver.findElement(By.name("randomButton2")).getAttribute("value");
+        assertFalse(!buttonNameOnPage.equals("This is a button"));
     }
 
     @Test
@@ -61,5 +73,12 @@ public class Sample3Task {
 //        TODO:
 //        check that none of items with class "test"
 //        contain number 190
+        List<WebElement> allElementsWithClass = driver.findElements(By.className("test"));
+        for (WebElement elementWithClass : allElementsWithClass) {
+            if(elementWithClass.getText().contains("190")){
+                throw new Exception("Items with class 'test' contain number 190");
+            }
+        }
+
     }
 }
