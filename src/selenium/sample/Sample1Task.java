@@ -13,7 +13,7 @@ public class Sample1Task {
     @Test
     public void goToHomepage() throws Exception {
 //        TODO:
-        
+
 //          define driver
         System.setProperty("webdriver.chrome.driver", libWithDriversLocation + "chromedriver" + new selenium.ChangeToFileExtension().extension());
         WebDriver driver = new ChromeDriver();

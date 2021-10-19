@@ -14,6 +14,7 @@ import static org.junit.Assert.assertEquals;
 
 public class Sample5Task {
     WebDriver driver;
+    String secondPageUrl = "https://kristinek.github.io/site/examples/alerted_page";
 
     // method which is being run before each test
     @Before
@@ -30,6 +31,7 @@ public class Sample5Task {
     // method which is being run after each test
     @After
     public void endingTests() throws Exception {
+        Thread.sleep(5000);
         driver.close();
     }
 
@@ -37,20 +39,34 @@ public class Sample5Task {
     public void goToAlertedPageViaButton() throws Exception {
 //         TODO:
 //        click on "To go to alerted page press Ok. Or stay here" button
+        driver.findElement(By.className("w3-blue")).click();
 //        switch to alert
+        Alert alert = driver.switchTo().alert();
 //        click ok
+        alert.accept();
 //        switch to second alert
+        Alert alert2 = driver.switchTo().alert();
 //        verify alert text
+        assertEquals("Booooooooo!", alert.getText());
 //        click ok on second alert
+        alert2.accept();
 //        verify that the correct page is opened
+        assertEquals(secondPageUrl, driver.getCurrentUrl());
+
     }
 
     @Test
     public void doNotGoToAlertedPageViaButton() throws Exception {
 //         TODO:
 //        click on "To go to alerted page press Ok. Or stay here" button
+        driver.findElement(By.className("w3-blue")).click();
 //        switch to alert
+        Alert alert = driver.switchTo().alert();
 //        click cancel
+        alert.dismiss();
 //        verify the text on page
+        String expectedText = "So you desided to say? Good!";
+        String actualText = driver.findElement(By.id("textForAlerts")).getText();
+        assertEquals(expectedText, actualText);
     }
 }
