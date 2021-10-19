@@ -31,6 +31,7 @@ public class Sample8Task {
     // method which is being run after each test
     @After
     public void endingTests() throws Exception {
+        Thread.sleep(5000);
         driver.close();
     }
 
@@ -39,6 +40,13 @@ public class Sample8Task {
 //         TODO:
 //        check the background of top 2 sections
 //        rgba(255, 221, 221, 1);
+        WebElement element1 = driver.findElement(By.className("w3-pale-red"));
+        assertEquals("rgba(255, 221, 221, 1)", element1.getCssValue("background-color"));
+        WebElement element2 = driver.findElement(By.className("w3-pale-yellow"));
+        assertEquals("rgba(255, 255, 204, 1)", element2.getCssValue("background-color"));
+
 //        check h1 element font-size 64px
+        WebElement h1 = driver.findElement(By.className("w3-jumbo"));
+        assertEquals("64px", h1.getCssValue("font-size"));
     }
 }
