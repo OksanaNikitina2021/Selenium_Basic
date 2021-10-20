@@ -4,7 +4,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -12,8 +14,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class Sample9Task {
     WebDriver driver;
@@ -26,6 +27,11 @@ public class Sample9Task {
         driver.get("https://kristinek.github.io/site/examples/loading_color");
     }
 
+    private void loadingGreenCheck() {
+        System.out.println(driver.findElement(By.id("loading_green")).getText());
+        //assertEquals("Green Loaded", driver.findElement(By.id("loading_green")).getText());
+    }
+
     @After
     public void closeBrowser() {
         driver.close();
@@ -35,33 +41,60 @@ public class Sample9Task {
     public void loadGreenSleep() throws Exception {
 //         TODO:
 //         * 1) click on start loading green button
+        driver.findElement(By.id("start_green")).click();
 //         * 2) check that button does not appear,
 //         * but loading text is seen instead   "Loading green..."
+        assertFalse(driver.findElement(By.id("start_green")).isDisplayed());
+        Thread.sleep(3000);
+        loadingGreenCheck();
 //         * 3) check that both button
 //         * and loading text is not seen,
 //         * success is seen instead "Green Loaded"
+        Thread.sleep(3000);
+        assertFalse(driver.findElement(By.id("start_green")).isDisplayed());
+        assertFalse(driver.findElement(By.id("loading_green")).isDisplayed());
+        assertTrue(driver.findElement(By.id("finish_green")).isDisplayed());
     }
 
     @Test
     public void loadGreenImplicit() throws Exception {
 //         TODO:
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 //         * 1) click on start loading green button
+        driver.findElement(By.id("start_green")).click();
 //         * 2) check that button does not appear,
 //         * but loading text is seen instead   "Loading green..."
+        WebElement element = driver.findElement(By.id("start_green"));
+        assertFalse(element.isDisplayed());
+        loadingGreenCheck();
+        WebElement element2 = driver.findElement(By.id("loading_green"));
+        assertTrue(element2.isDisplayed());
 //         * 3) check that both button
 //         * and loading text is not seen,
 //         * success is seen instead "Green Loaded"
+        assertFalse(element.isDisplayed());
+        WebElement element3 = driver.findElement(By.id("finish_green"));
+        assertFalse(element2.isDisplayed());
+        assertTrue(element3.isDisplayed());
     }
 
     @Test
     public void loadGreenExplicitWait() throws Exception {
+        WebDriverWait wait = (WebDriverWait) new WebDriverWait(driver, 10).ignoring(StaleElementReferenceException.class);
 //         TODO:
 //         * 1) click on start loading green button
+        driver.findElement(By.id("start_green")).click();
 //         * 2) check that button does not appear,
 //         * but loading text is seen instead   "Loading green..."
+        assertFalse(driver.findElement(By.id("start_green")).isDisplayed());
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.id("loading_green")));
+        loadingGreenCheck();
 //         * 3) check that both button
 //         * and loading text is not seen,
 //         * success is seen instead "Green Loaded"
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.id("finish_green")));
+        assertFalse(driver.findElement(By.id("start_green")).isDisplayed());
+        assertFalse(driver.findElement(By.id("loading_green")).isDisplayed());
     }
 
     @Test
